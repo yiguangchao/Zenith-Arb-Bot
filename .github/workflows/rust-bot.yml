@@ -1,0 +1,50 @@
+name: Rust Bot CI
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+    paths:
+      - 'zenith_bot/**'
+      - '.github/workflows/rust-bot.yml'
+  pull_request:
+    branches: [ "main", "develop" ]
+    paths:
+      - 'zenith_bot/**'
+
+env:
+  CARGO_TERM_COLOR: always
+  WORKING_DIR: ./zenith_bot 
+
+jobs:
+  quality-check:
+    name: Rust Quality Gate
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: ${{ env.WORKING_DIR }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+
+      - name: Cache dependencies
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: ${{ env.WORKING_DIR }}
+
+      - name: Check formatting
+        run: cargo fmt --all -- --check
+
+      - name: Lint with Clippy
+        run: cargo clippy -- -D warnings
+
+      - name: Run cargo check
+        run: cargo check
+
+      - name: Run tests
+        run: cargo test
