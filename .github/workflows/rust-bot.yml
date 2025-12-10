@@ -4,26 +4,25 @@ on:
   push:
     branches: [ "main", "develop" ]
     paths:
-      - 'zenith_bot/**'
+      - 'src/**'
+      - 'Cargo.toml'
+      - 'Cargo.lock'
       - '.github/workflows/rust-bot.yml'
   pull_request:
     branches: [ "main", "develop" ]
     paths:
-      - 'zenith_bot/**'
+      - 'src/**'
+      - 'Cargo.toml'
+      - 'Cargo.lock'
 
 env:
   CARGO_TERM_COLOR: always
-  WORKING_DIR: ./zenith_bot 
-
+  
 jobs:
   quality-check:
     name: Rust Quality Gate
     runs-on: ubuntu-latest
     
-    defaults:
-      run:
-        working-directory: ${{ env.WORKING_DIR }}
-
     steps:
       - uses: actions/checkout@v4
 
@@ -34,9 +33,7 @@ jobs:
 
       - name: Cache dependencies
         uses: Swatinem/rust-cache@v2
-        with:
-          workspaces: ${{ env.WORKING_DIR }}
-
+        
       - name: Check formatting
         run: cargo fmt --all -- --check
 
