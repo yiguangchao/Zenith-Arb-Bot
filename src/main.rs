@@ -19,8 +19,8 @@ sol! {
 #[tokio::main]
 async fn main() -> Result<()> {
     // 1. Change the connection protocol to WebSocket (ws://)
-    let rpc_url = "ws://127.0.0.1:8545"; 
-    
+    let rpc_url = "ws://127.0.0.1:8545";
+
     // establish a long connection
     let ws = WsConnect::new(rpc_url);
     let provider = ProviderBuilder::new().on_ws(ws).await?;
@@ -53,7 +53,6 @@ async fn main() -> Result<()> {
                     "🔔 Event Detected! New Reserves => Reserve0: {}, Reserve1: {}",
                     event.reserve0, event.reserve1
                 );
-                
                 // --- 💡 Trigger arbitrage logic here ---
                 // calculate_price(event.reserve0, event.reserve1);
                 // if price_gap > threshold { execute_trade() }
@@ -61,6 +60,5 @@ async fn main() -> Result<()> {
             Err(e) => println!("Error decoding log: {:?}", e),
         }
     }
-
     Ok(())
 }
