@@ -28,13 +28,11 @@ async fn main() -> Result<()> {
     println!("✅ WebSocket Connected!");
 
     // 2. Configure listening targets
-    // 去掉前面的 "0x"
-    let pair_address = address!("0000000000000000000000000000000000000000");
+    let pair_address = address!("C02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2");
 
     // Create filter (Filter)
-    // 意思：我只关心来自 pair_address 的日志，且 Topic 必须是 Sync 事件
     let filter = Filter::new()
-        .address(pair_address)
+        // .address(pair_address)
         .event("Sync(uint112,uint112)");
 
     // 3. Subscription event stream (Subscribe)
