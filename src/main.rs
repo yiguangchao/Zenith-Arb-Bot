@@ -37,7 +37,7 @@ async fn main() -> Result<()> {
     // 2. Connect WebSocket
     let rpc_url = "ws://127.0.0.1:8545";
     let ws = WsConnect::new(rpc_url);
-    
+
     // 3. build Provider
     let provider = ProviderBuilder::new()
         .with_recommended_fillers()
@@ -51,14 +51,13 @@ async fn main() -> Result<()> {
     let pair_address = address!("C02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2");
     let router_address = address!("8A791620dd6260079BF849Dc5567aDC3F2FdC318");
 
-    
     // Fake token address
-    let token_a = address!("0000000000000000000000000000000000000001"); 
+    let token_a = address!("0000000000000000000000000000000000000001");
     let token_b = address!("0000000000000000000000000000000000000002");
     // Define recipient (Anvil account 0)
     let recipient = address!("f39Fd6e51aad88F6F4ce6aB8827279cffFb92266");
 
-    // Example based contract 
+    // Example based contract
     let router = ZenithRouter::new(router_address, provider.clone());
 
     // 5. Monitor Sync events
@@ -73,22 +72,17 @@ async fn main() -> Result<()> {
 
     while let Some(_log) = stream.next().await {
         println!("\n🚨 Signal Detected!");
-        
+
         let amount_in = U256::from(1000);
         let amount_out_min = U256::from(0);
         let deadline = U256::from(1999999999);
-        
-        let path = vec![token_a, token_b]; 
+
+        let path = vec![token_a, token_b];
 
         println!("🔫 Triggering Swap Transaction...");
 
-        let tx_builder = router.swapExactTokensForTokens(
-            amount_in, 
-            amount_out_min, 
-            path, 
-            recipient, 
-            deadline
-        );
+        let tx_builder =
+            router.swapExactTokensForTokens(amount_in, amount_out_min, path, recipient, deadline);
 
         let tx_result = tx_builder.send().await;
 
