@@ -34,7 +34,7 @@ async fn main() -> Result<()> {
     // --- 3. connect WebSocket ---
     let rpc_url = "ws://127.0.0.1:8545";
     let ws = WsConnect::new(rpc_url);
-    
+
     let provider = ProviderBuilder::new()
         .with_recommended_fillers()
         .wallet(wallet)
@@ -44,7 +44,7 @@ async fn main() -> Result<()> {
     println!("✅ Arbitrage Bot Connected!");
 
     // --- 4. Configure address  ---
-    let pair_address = address!("C02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"); 
+    let pair_address = address!("C02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2");
     let flash_arb_address = address!("Dc64a140Aa3E981100a9becA4E685f962f0cF6C9");
 
     // Example based contract
@@ -61,14 +61,14 @@ async fn main() -> Result<()> {
 
     while let Some(_log) = stream.next().await {
         println!("\n🚨 Signal Detected! Executing Flash Loan...");
-        
-        let amount0 = U256::from(10_000_000_000_000_000_000_u128); 
+
+        let amount0 = U256::from(10_000_000_000_000_000_000_u128);
         let amount1 = U256::from(0);
 
         let tx_builder = flash_bot.startArbitrage(pair_address, amount0, amount1);
 
         let tx = tx_builder.send().await;
-        
+
         match tx {
             Ok(pending) => {
                 println!("🚀 Transaction Broadcasted! Hash: {}", pending.tx_hash());
