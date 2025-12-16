@@ -51,7 +51,7 @@ async fn main() -> Result<()> {
     let flash_bot = FlashArbitrage::new(flash_arb_address, provider.clone());
 
     let filter = Filter::new()
-        .address(pair_address)
+    //    .address(pair_address)
         .event("Sync(uint112,uint112)");
 
     let sub = provider.subscribe_logs(&filter).await?;
